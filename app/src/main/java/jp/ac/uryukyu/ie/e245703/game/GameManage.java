@@ -8,6 +8,7 @@ public class GameManage {
     public static final int SPACE = 5; // フィールドの上の空間(描画はしない)
     // フィールド
     private int[][] field;
+    private Tetrimino activeMino; // 現在操作可能なテトリミノを保持
 
     public GameManage(){
         this.field = new int[ROWS + SPACE][COLUMNS];  // 空白のフィールドを生成
@@ -15,6 +16,14 @@ public class GameManage {
 
     public int getBlock(int y, int x){
         return field[y][x];
+    }
+
+    public Tetrimino getActiveMino(){
+        return activeMino;
+    }
+
+    public void setActiveMino(Tetrimino mino){ // テスト用のsetterメソッド(後々消去予定)
+        this.activeMino = mino;
     }
 
     public void setField(int[][] testField){ // テスト用のsetterメソッド(後々消去予定)

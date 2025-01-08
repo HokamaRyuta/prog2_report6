@@ -2,11 +2,14 @@ package jp.ac.uryukyu.ie.e245703.ui;
 
 import static jp.ac.uryukyu.ie.e245703.game.GameManage.*;
 import jp.ac.uryukyu.ie.e245703.game.*;
+import jp.ac.uryukyu.ie.e245703.game.Controller.MinoKeyListener;
+
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 
 public class FieldPanel extends JPanel{
     private static final long serialVersionUID = 1L;
@@ -14,6 +17,8 @@ public class FieldPanel extends JPanel{
     BorderLayout layout = new BorderLayout();
     // GameManageの参照
     GameManage gm;
+    // キーリスナー
+    MinoKeyListener minoKeyListener;
 
     // コンストラクタ
     public FieldPanel(){
@@ -21,6 +26,10 @@ public class FieldPanel extends JPanel{
         this.setLayout(layout); // レイアウト設定
         this.setBackground(Color.black); // 背景の色
         setPreferredSize(new Dimension(COLUMNS * TILE_SIZE, ROWS * TILE_SIZE)); // ウィンドウサイズ
+        minoKeyListener = new MinoKeyListener(this);
+        this.addKeyListener(minoKeyListener);
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
 
     @Override
@@ -37,6 +46,20 @@ public class FieldPanel extends JPanel{
                     // 枠線の描画
                     g.setColor(Color.gray);
                     g.drawRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                }
+            }
+        }
+
+        // 現在操作しているテトリミノを描画
+        if(gm.getActiveMino() != null){
+            for (Point block : gm.getActiveMino().getShape()) {
+                int x = gm.getActiveMino().getPosition().x + block.x;
+                int y = gm.getActiveMino().getPosition().y + block.y;
+                if(x > 0 || x <= COLUMNS || y > SPACE || y <= ROWS + SPACE){
+                    g.setColor(getBlockColor(gm.getActiveMino().getShapeNumber()));
+                    g.fillRect(x * TILE_SIZE, (y - SPACE) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    g.setColor(Color.GRAY);
+                    g.drawRect(x * TILE_SIZE, (y - SPACE) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
             }
         }

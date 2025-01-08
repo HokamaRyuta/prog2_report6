@@ -1,5 +1,6 @@
 package jp.ac.uryukyu.ie.e245703;
 
+import jp.ac.uryukyu.ie.e245703.game.Tetrimino;
 import jp.ac.uryukyu.ie.e245703.ui.FieldPanel;
 import javax.swing.JFrame;
 
@@ -48,6 +49,9 @@ public class Main {
         FieldPanel fieldPanel = new FieldPanel();
 
         fieldPanel.getGameManage().setField(testField);
+
+        Tetrimino tmino = new Tetrimino(2);
+        fieldPanel.getGameManage().setActiveMino(tmino);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(fieldPanel);
