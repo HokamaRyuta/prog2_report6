@@ -1,5 +1,7 @@
 package jp.ac.uryukyu.ie.e245703.game;
 
+import java.awt.Point;
+
 public class GameManage {
     // 定数
     public static final int TILE_SIZE = 30; // 1マスのサイズ（ピクセル）
@@ -20,6 +22,18 @@ public class GameManage {
 
     public Tetrimino getActiveMino(){
         return activeMino;
+    }
+
+    public boolean canMove(){ // 現在操作しているテトリミノがフィールド外または他のブロックと重なっているかを判定するメソッド
+        for(Point block : activeMino.getShape()){
+            int x = activeMino.getPosition().x + block.x;
+            int y = activeMino.getPosition().y + block.y;
+            
+            if(x < 0 || x >= COLUMNS || y < 0 || y >= ROWS + SPACE || field[y][x] != 0){
+                return false; // 衝突
+            }
+        }
+        return true;
     }
 
     public void setActiveMino(Tetrimino mino){ // テスト用のsetterメソッド(後々消去予定)

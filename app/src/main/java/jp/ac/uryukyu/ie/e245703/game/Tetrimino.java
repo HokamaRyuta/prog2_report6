@@ -64,4 +64,8 @@ public class Tetrimino {
     public void moveDown(){
         position.y += 1;
     }
+
+    public void moveUP(){
+        position.y -= 1;
+    }
 }
