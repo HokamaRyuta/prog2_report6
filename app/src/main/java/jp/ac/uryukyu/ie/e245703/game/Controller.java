@@ -49,6 +49,20 @@ public class Controller {
                             gm.getActiveMino().moveUP();
                         }
                         break;
+
+                    case KeyEvent.VK_E:
+                        gm.getActiveMino().clockwiseRotation();
+                        if(!gm.canMove()){
+                            gm.getActiveMino().counterclockwiseRotation();
+                        }
+                        break;
+
+                    case KeyEvent.VK_W:
+                        gm.getActiveMino().counterclockwiseRotation();
+                        if(!gm.canMove()){
+                            gm.getActiveMino().clockwiseRotation();
+                        }
+                        break;
                 }
             }
             panel.repaint();
