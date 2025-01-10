@@ -51,7 +51,7 @@ public class FieldPanel extends JPanel{
         }
 
         // 現在操作しているテトリミノを描画
-        if(gm.getActiveMino() != null){
+        if(gm.isControllable()){
             for (Point block : gm.getActiveMino().getShape()) {
                 int x = gm.getActiveMino().getPosition().x + block.x;
                 int y = gm.getActiveMino().getPosition().y + block.y;

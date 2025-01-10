@@ -27,7 +27,7 @@ public class Controller {
 
         @Override
         public void keyPressed(KeyEvent e){
-            if(gm.getActiveMino() != null){
+            if(gm.isControllable()){
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_RIGHT:
                         gm.getActiveMino().moveRight();
@@ -46,7 +46,13 @@ public class Controller {
                     case KeyEvent.VK_DOWN:
                         gm.getActiveMino().moveDown();
                         if(!gm.canMove()){
-                            gm.getActiveMino().moveUP();
+                            if(gm.canFix()){
+                                gm.getActiveMino().moveUP();
+                                gm.fixMinoInField();
+                            }
+                            else{
+                                gm.getActiveMino().moveUP();
+                            }
                         }
                         break;
 
