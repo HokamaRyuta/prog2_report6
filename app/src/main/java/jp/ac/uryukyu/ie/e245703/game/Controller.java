@@ -49,6 +49,7 @@ public class Controller {
                             if(gm.canFix()){
                                 gm.getActiveMino().moveUP();
                                 gm.fixMinoInField();
+                                gm.generateMino();
                             }
                             else{
                                 gm.getActiveMino().moveUP();

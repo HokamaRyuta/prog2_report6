@@ -1,6 +1,9 @@
 package jp.ac.uryukyu.ie.e245703.game;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class GameManage {
     // 定数
@@ -12,9 +15,17 @@ public class GameManage {
     private int[][] field;
     private Tetrimino activeMino; // 現在操作可能なテトリミノを保持
     private boolean isControllable; // activeMinoが操作できる状態かを表す
+    private int[] currentShuffleList; // 生成するテトリミノの順番を保存する配列
+    private int[] nextShuffleList; // 生成するテトリミノの順番を保存する配列(currentShuffleListの全要素を参照し終えた後に使う)
+    private int index; // currentShuffleListの要素にアクセスするためのインデックスを保存
 
     public GameManage(){
         this.field = new int[ROWS + SPACE][COLUMNS];  // 空白のフィールドを生成
+        currentShuffleList = generateRandomArray();
+        do{
+            nextShuffleList = generateRandomArray();
+        } while(currentShuffleList[6] == nextShuffleList[0]);
+        generateMino();
     }
 
     public int getBlock(int y, int x){
@@ -69,13 +80,32 @@ public class GameManage {
         }
     }
 
-    public void setActiveMino(Tetrimino mino){ // テスト用のsetterメソッド(後々消去予定)
-        this.activeMino = mino;
-        enableControl();
+    public int[] generateRandomArray(){
+        // 1～7をリストに追加
+        List<Integer> set = new ArrayList<>();
+        for (int i = 1; i <= 7; i++) {
+            set.add(i);
+        }
+        // リスト内の要素をシャッフル
+        Collections.shuffle(set);
+        // リストをストリーム化し、Integerをintに変換した後、配列にして返す
+        return set.stream().mapToInt(Integer::intValue).toArray();
     }
 
-    public void setField(int[][] testField){ // テスト用のsetterメソッド(後々消去予定)
-        this.field = testField;
+    public void generateMino(){
+        if(!isControllable){
+            activeMino = new Tetrimino(currentShuffleList[index]);
+            if(index == 6){
+                currentShuffleList = nextShuffleList.clone();
+                do{
+                    nextShuffleList = generateRandomArray();
+                } while(currentShuffleList[6] == nextShuffleList[0]);
+                index = 0;
+            }
+            else{
+                index++;
+            }
+            enableControl();
+        }
     }
-
 }
