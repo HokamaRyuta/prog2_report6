@@ -2,6 +2,7 @@ package jp.ac.uryukyu.ie.e245703.ui;
 
 import static jp.ac.uryukyu.ie.e245703.game.GameManage.*;
 import jp.ac.uryukyu.ie.e245703.game.*;
+import jp.ac.uryukyu.ie.e245703.game.Controller.MinoActionListener;
 import jp.ac.uryukyu.ie.e245703.game.Controller.MinoKeyListener;
 
 import javax.swing.JPanel;
@@ -10,6 +11,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import javax.swing.Timer;
 
 public class FieldPanel extends JPanel{
     private static final long serialVersionUID = 1L;
@@ -19,6 +21,9 @@ public class FieldPanel extends JPanel{
     GameManage gm;
     // キーリスナー
     MinoKeyListener minoKeyListener;
+    MinoActionListener minoActionListener;
+    // MinoActionListener用のTimer
+    Timer timer = null;
 
     // コンストラクタ
     public FieldPanel(){
@@ -30,6 +35,9 @@ public class FieldPanel extends JPanel{
         this.addKeyListener(minoKeyListener);
         this.setFocusable(true);
         this.requestFocusInWindow();
+        minoActionListener = new MinoActionListener(this);
+        timer = new Timer(800, minoActionListener);
+        timer.start();
     }
 
     @Override

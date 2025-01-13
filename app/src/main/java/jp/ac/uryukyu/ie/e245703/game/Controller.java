@@ -3,6 +3,8 @@ package jp.ac.uryukyu.ie.e245703.game;
 import jp.ac.uryukyu.ie.e245703.ui.FieldPanel;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Controller {
     public static class MinoKeyListener implements KeyListener{
@@ -70,6 +72,35 @@ public class Controller {
                             gm.getActiveMino().clockwiseRotation();
                         }
                         break;
+                }
+            }
+            panel.repaint();
+        }
+    }
+
+    public static class MinoActionListener implements ActionListener{
+        private FieldPanel panel;
+        private GameManage gm;
+
+        // コンストラクタ
+        public MinoActionListener(FieldPanel p){
+            panel = p;
+            gm = panel.getGameManage();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(gm.isControllable()){
+                gm.getActiveMino().moveDown();
+                if(!gm.canMove()){
+                    if(gm.canFix()){
+                        gm.getActiveMino().moveUP();
+                        gm.fixMinoInField();
+                        gm.generateMino();
+                    }
+                    else{
+                        gm.getActiveMino().moveUP();
+                    }
                 }
             }
             panel.repaint();
