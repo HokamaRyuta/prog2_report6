@@ -46,17 +46,21 @@ public class Controller {
                         break;
 
                     case KeyEvent.VK_DOWN:
+                        panel.stopTimer();
                         gm.getActiveMino().moveDown();
                         if(!gm.canMove()){
                             if(gm.canFix()){
                                 gm.getActiveMino().moveUP();
                                 gm.fixMinoInField();
+                                gm.clearAndCountLines();
+                                panel.updateTimerDelay();
                                 gm.generateMino();
                             }
                             else{
                                 gm.getActiveMino().moveUP();
                             }
                         }
+                        panel.startTimer();
                         break;
 
                     case KeyEvent.VK_E:
@@ -96,6 +100,8 @@ public class Controller {
                     if(gm.canFix()){
                         gm.getActiveMino().moveUP();
                         gm.fixMinoInField();
+                        gm.clearAndCountLines();
+                        panel.updateTimerDelay();
                         gm.generateMino();
                     }
                     else{

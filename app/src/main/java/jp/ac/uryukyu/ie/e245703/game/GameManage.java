@@ -18,6 +18,7 @@ public class GameManage {
     private int[] currentShuffleList; // 生成するテトリミノの順番を保存する配列
     private int[] nextShuffleList; // 生成するテトリミノの順番を保存する配列(currentShuffleListの全要素を参照し終えた後に使う)
     private int index; // currentShuffleListの要素にアクセスするためのインデックスを保存
+    private int countClearLines; // 消去したラインの数を保存(消したライン数によって落下速度が増加)
 
     public GameManage(){
         this.field = new int[ROWS + SPACE][COLUMNS];  // 空白のフィールドを生成
@@ -26,6 +27,7 @@ public class GameManage {
             nextShuffleList = generateRandomArray();
         } while(currentShuffleList[6] == nextShuffleList[0]);
         generateMino();
+        System.out.printf("ゲームスタート!!\n現在のレベル:%d\n", countClearLines);
     }
 
     public int getBlock(int y, int x){
@@ -34,6 +36,10 @@ public class GameManage {
 
     public Tetrimino getActiveMino(){
         return activeMino;
+    }
+
+    public int getCountClearLines(){
+        return countClearLines;
     }
 
     public boolean isControllable(){
@@ -106,6 +112,36 @@ public class GameManage {
                 index++;
             }
             enableControl();
+        }
+    }
+
+    public void clearLine(int row){
+        // 引数で指定した行を消去して、上から詰める
+        for(int y = row; y > 0; y--){
+            for(int x = 0; x < COLUMNS; x++){
+                field[y][x] = field[y-1][x];
+            }
+        }
+        // 一番上の行を空白にする
+        for(int x = 0; x < COLUMNS; x++){
+            field[0][x] = 0;
+        }
+    }
+
+    public void clearAndCountLines(){
+        for(int y = 0; y < ROWS + SPACE; y++){
+            boolean isRowFilled = true;
+            for(int x = 0; x < COLUMNS; x++){
+                if(field[y][x] == 0){
+                    isRowFilled = false;
+                    break;
+                }
+            }
+            if(isRowFilled){
+                clearLine(y);
+                y--;
+                countClearLines++;
+            }
         }
     }
 }

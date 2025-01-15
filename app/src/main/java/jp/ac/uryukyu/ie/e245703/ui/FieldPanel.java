@@ -90,4 +90,30 @@ public class FieldPanel extends JPanel{
     public GameManage getGameManage(){
         return gm;
     }
+
+    public void startTimer() {
+        timer.start();
+    }
+
+    public void stopTimer() {
+        timer.stop();
+    }
+
+    public void updateTimerDelay() { // 消去したラインの数に応じて落下速度を増加
+        if(timer.getDelay() == 16){ // 落下時間は約1フレームにつき1マス落下を最小とする
+            return;
+        }
+        int newDelay = 800 - (gm.getCountClearLines() / 10) * 50;
+
+        if(newDelay == timer.getDelay()){
+            return;
+        }
+        else if(newDelay > 16){
+            timer.setDelay(newDelay);
+            System.out.printf("レベルUP!!\n現在のレベル:%d\n", gm.getCountClearLines() / 10);
+        }
+        else{
+            timer.setDelay(16);
+        }
+    }
 }
