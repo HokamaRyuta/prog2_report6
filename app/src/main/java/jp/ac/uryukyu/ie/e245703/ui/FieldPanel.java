@@ -71,6 +71,21 @@ public class FieldPanel extends JPanel{
                 }
             }
         }
+
+        // ゲームオーバーの画面を描画
+        if(gm.isGameOver()){
+            stopTimer();
+            // 画面を半透明の黒で塗りつぶし
+            g.setColor(new Color(0, 0, 0, 200));
+            g.fillRect(0, 0, getWidth(), getHeight());
+            // ゲームオーバーの文字を表示
+            g.setColor(Color.white);
+            g.setFont(g.getFont().deriveFont(30f));
+            g.drawString("GAME OVER", getWidth() / 2 - 90, getHeight() / 2 - 20);
+            // 消去したライン数を表示
+            g.setFont(g.getFont().deriveFont(20f));
+            g.drawString("Lines Cleared: " + gm.getCountClearLines(), getWidth() / 2 - 90, getHeight() / 2 + 20);
+        }
     }
 
     // テトリミノの種類ごとに色を取得するメソッド

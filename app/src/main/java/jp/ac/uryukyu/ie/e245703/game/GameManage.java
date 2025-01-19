@@ -101,6 +101,9 @@ public class GameManage {
     public void generateMino(){
         if(!isControllable){
             activeMino = new Tetrimino(currentShuffleList[index]);
+            if(isGameOver()){
+                return;
+            }
             if(index == 6){
                 currentShuffleList = nextShuffleList.clone();
                 do{
@@ -143,5 +146,16 @@ public class GameManage {
                 countClearLines++;
             }
         }
+    }
+
+    public boolean isGameOver(){ // テトリミノの生成位置にブロックがあるかを判定
+        for(Point block: activeMino.getShape()){
+            if(block.y + activeMino.getPosition().y < SPACE || block.y + activeMino.getPosition().y >= 0){ // テトリミノの位置が21段目以上にあることを確認
+                if(field[block.y + activeMino.getPosition().y][block.x + activeMino.getPosition().x] != 0){
+                    return true; // ゲームオーバー
+                }
+            }
+        }
+        return false;
     }
 }
