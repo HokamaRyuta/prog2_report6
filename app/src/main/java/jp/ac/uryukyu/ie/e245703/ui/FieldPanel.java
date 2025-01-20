@@ -12,20 +12,43 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import javax.swing.Timer;
-
+/**
+ * フィールドや操作しているテトリミノを描画するクラスです。
+ * {@link Timer}を用いて、一定時間ごとのテトリミノの落下を制御します。
+ *  また、キーリスナーとアクションリスナーを保持し、ユーザー操作の受付を行います。
+ */
 public class FieldPanel extends JPanel{
+    /**
+     * シリアライズ時のバージョン管理用IDです。
+     */
     private static final long serialVersionUID = 1L;
-    // レイアウト
+    /**
+     * パネルのレイアウトマネージャーです。BorderLayoutを使用しています。
+     */
     BorderLayout layout = new BorderLayout();
-    // GameManageの参照
+    /**
+     * ゲームの状態を管理する{@link GameManage}オブジェクトへの参照です。
+     */
     GameManage gm;
-    // キーリスナー
+    /**
+     * キーボード操作を受け付けるための{@link MinoKeyListener}です。
+     */
     MinoKeyListener minoKeyListener;
+    /**
+     * 一定時間ごとにテトリミノを落下させるための{@link MinoActionListener}です。
+     */
     MinoActionListener minoActionListener;
-    // MinoActionListener用のTimer
+    /**
+     * テトリミノの自動落下を制御するための{@link Timer}です。
+     */
     Timer timer = null;
 
     // コンストラクタ
+    /**
+     * FieldPanelクラスのコンストラクタです。
+     * ゲームの初期化、レイアウトや背景色の設定、キーリスナーやアクションリスナーの初期化を行います。
+     * また、{@link Timer}を起動して、テトリミノの自動落下を開始します。
+     */
     public FieldPanel(){
         gm = new GameManage();
         this.setLayout(layout); // レイアウト設定
@@ -40,6 +63,10 @@ public class FieldPanel extends JPanel{
         timer.start();
     }
 
+    /**
+     * フィールド全体および現在操作中のテトリミノ、ゲームオーバー画面を描画します。
+     * @param g 描画用のGraphicsオブジェクト
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -88,7 +115,15 @@ public class FieldPanel extends JPanel{
         }
     }
 
-    // テトリミノの種類ごとに色を取得するメソッド
+    /**
+     * テトリミノの形状に応じて描画する色を取得します。
+     * @param shapeNumber テトリミノの形状を表す番号
+     * @return 対応する色
+     * <p>
+     * 各番号がどのテトリミノに対応するかについては、
+     * {@link Tetrimino#getShapeNumber()} のドキュメントを参照してください。
+     * </p>
+    */
     public Color getBlockColor(int shapeNumber){
         switch (shapeNumber) {
             case 1: return Color.yellow; // Oミノ
@@ -102,20 +137,35 @@ public class FieldPanel extends JPanel{
         }
     }
 
+    /**
+     * ゲーム管理オブジェクトを取得します。
+     * @return 現在の{@link GameManage}オブジェクト
+     */
     public GameManage getGameManage(){
         return gm;
     }
 
+    /**
+     * タイマーを開始し、テトリミノの自動落下を開始します。
+     */
     public void startTimer() {
         timer.start();
     }
 
+    /**
+     * タイマーを停止し、テトリミノの自動落下を停止します。
+     */
     public void stopTimer() {
         timer.stop();
     }
 
-    public void updateTimerDelay() { // 消去したラインの数に応じて落下速度を増加
-        if(timer.getDelay() == 16){ // 落下時間は約1フレームにつき1マス落下を最小とする
+    /**
+     * 消去した累計ライン数に応じて、タイマーの遅延時間を更新します。
+     * 初期状態は0.8秒あたりに1マス落下し、10ライン消すごとに0.05秒短縮していきます。
+     * 最大速度は1フレーム(0.016秒)あたり1マスの落下速度に制限されます。
+     */
+    public void updateTimerDelay() {
+        if(timer.getDelay() == 16){
             return;
         }
         int newDelay = 800 - (gm.getCountClearLines() / 10) * 50;
